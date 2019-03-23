@@ -18,9 +18,14 @@ import java.time.LocalDateTime;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .mvcMatchers("/").permitAll()
-                .anyRequest().authenticated()
+        http.antMatcher("/**")
+                .authorizeRequests()
+                .antMatchers("/", "/login**", "/js/**", "/error**")
+                .permitAll()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .logout().logoutSuccessUrl("/").permitAll()
                 .and()
                 .csrf().disable();
     }
@@ -34,6 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 newUser.setId(id);
                 newUser.setEmail((String) map.get("email"));
                 newUser.setName((String) map.get("name"));
+                //newUser.setGender((String) map.get("gender"));
                 newUser.setLocale((String) map.get("locale"));
                 newUser.setUserPicture((String) map.get("picture"));
                 return newUser;
