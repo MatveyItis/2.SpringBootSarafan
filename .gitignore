@@ -13,3 +13,4 @@ build/
 out/
 .gradle/
 gradle/
+node_modules
