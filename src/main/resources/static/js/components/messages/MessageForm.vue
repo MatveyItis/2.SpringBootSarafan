@@ -6,15 +6,7 @@
 </template>
 
 <script>
-    function getIndex(list, id) {
-        for (var i = 0; i < list.length; i++) {
-            if (list[i].id === id) {
-                return i
-            }
-        }
-
-        return -1
-    }
+    import {sendMessage} from "util/ws";
 
     export default {
         props: ['messages', 'messageAttr'],
@@ -25,14 +17,18 @@
             }
         },
         watch: {
-            messageAttr(newVal, oldVal) {
+            messageAttr(newVal) {
                 this.text = newVal.text
                 this.id = newVal.id
             }
         },
         methods: {
             save() {
-                const message = {text: this.text};
+                sendMessage({id: this.id, text: this.text})
+                this.id = ''
+                this.text = ''
+
+                /*const message = {text: this.text};
 
                 if (this.id) {
                     this.$resource('/message/{id}').update({id: this.id}, message).then(result =>
@@ -40,6 +36,7 @@
                             const index = getIndex(this.messages, data.id)
                             this.messages.splice(index, 1, data)
                             this.text = ''
+                            this.id = ''
                         })
                     )
                 } else {
@@ -49,7 +46,7 @@
                             this.text = ''
                         })
                     )
-                }
+                }*/
             }
         }
     }
